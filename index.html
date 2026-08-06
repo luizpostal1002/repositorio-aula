@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Validador de CPF</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 40px; }
+  #resultado { margin-top: 10px; font-weight: bold; }
+  .valido { color: green; }
+  .invalido { color: red; }
+</style>
+</head>
+<body>
+
+<h1>Validador de CPF</h1>
+
+<input type="text" id="cpf" placeholder="Digite o CPF">
+<button type="button" onclick="validar()">Validar</button>
+
+<div id="resultado"></div>
+
+<script>
+function validar() {
+  var cpf = document.getElementById("cpf").value;
+  cpf = cpf.replace(/[^\d]+/g, '');
+
+  var resultado = document.getElementById("resultado");
+
+  if (cpf.length != 11) {
+    resultado.innerHTML = "CPF inválido";
+    resultado.className = "invalido";
+    return;
+  }
+
+  if (/^(\d)\1{10}$/.test(cpf)) {
+    resultado.innerHTML = "CPF inválido";
+    resultado.className = "invalido";
+    return;
+  }
+
+  var soma = 0;
+  for (var i = 0; i < 9; i++) {
+    soma += parseInt(cpf.charAt(i)) * (10 - i);
+  }
+  var resto = 11 - (soma % 11);
+  var digito1 = (resto == 10 || resto == 11) ? 0 : resto;
+
+  soma = 0;
+  for (var i = 0; i < 10; i++) {
+    soma += parseInt(cpf.charAt(i)) * (11 - i);
+  }
+  resto = 11 - (soma % 11);
+  var digito2 = (resto == 10 || resto == 11) ? 0 : resto;
+
+  if (digito1 == parseInt(cpf.charAt(9)) && digito2 == parseInt(cpf.charAt(10))) {
+    resultado.innerHTML = "CPF válido";
+    resultado.className = "valido";
+  } else {
+    resultado.innerHTML = "CPF inválido";
+    resultado.className = "invalido";
+  }
+}
+</script>
+
+</body>
+</html>
